@@ -1,0 +1,54 @@
+.text
+
+main:
+    li $v0, 5 # syscall para ler inteiro
+    syscall 
+    move $s0, $v0 # armazena $v0 em $s0
+
+    li $v0, 10 
+    ble $s0, $v0, menorIgualDez # se $s0 for menor ou igual a 10, executa menorIgualDez
+    li $v0, 30
+    ble $s0, $v0, menorIgualTrinta # se $s0 for menor ou igual a 30, executa menorIgualTrinta
+    li $v0, 100
+    ble $s0, $v0, menorIgualCem # se $s0 for menor ou igual a 100, executa menorIgualCem
+    bgt $s0, $v0, maiorQueCem # se $s0 for maior que 100, executa maiorQueCem
+
+menorIgualDez:
+    li $s0, 7 # armazena 7 em $s0
+
+    jal imprimir # chama a função para imprimir e finalizar o programa
+
+menorIgualTrinta:
+    li $v0, -10
+    add $s0, $s0, $v0 # tira 10 para fazer a conta
+    addi $s0, $s0, 7 # soma 7 a conta
+
+    jal imprimir # chama a função para imprimir e finalizar o programa
+
+menorIgualCem:
+    li $v0, -30
+    add $s0, $s0, $v0 # tira 30 para fazer a conta
+    mul $s0, $s0, 2 # multiplica por 2
+    addi $s0, $s0, 7 # soma 7 a conta
+    addi $s0, $s0, 20 # soma 20 a conta
+
+    jal imprimir # chama a função para imprimir e finalizar o programa
+
+maiorQueCem:
+    li $v0, -100
+    add $s0, $s0, $v0 # tira 100 para fazer a conta
+    mul $s0, $s0, 5 # multiplica por 5
+    addi $s0, $s0, 140 # soma 140 a conta
+    addi $s0, $s0, 20 # soma 20 a conta
+    addi $s0, $s0, 7 # soma 7 a conta
+
+    jal imprimir # chama a função para imprimir e finalizar o programa
+
+imprimir:
+    li $v0, 1 # syscall para imprimir inteiro
+    move $a0, $s0 # passa o maximo para $a0
+    syscall
+
+    li $v0, 10 # syscall para sair do programa
+    syscall
+

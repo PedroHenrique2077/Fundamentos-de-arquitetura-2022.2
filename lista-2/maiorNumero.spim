@@ -1,0 +1,28 @@
+.text
+
+main:
+    li $v0, 5 # syscall para ler inteiro
+    syscall 
+    move $s0, $v0 # armazena o tamanho da sequencia em $s0
+
+    li $s1, -2147483648 # armazena o valor minimo de int em $s1
+
+loop:
+    li $v0, 5 # syscall para ler inteiro
+    syscall 
+    move $t0, $v0 # armazena o numero lido em $t0
+
+    bgt $t0, $s1, skip # se o numero lido for > que o maximo atual, va para skip
+
+skip:
+    move $s1, $t0 # atualiza o maximo
+    addi $s0, $s0, -1 # decrementa o contador
+    bne $s0, $zero, loop # se o contador nao for zero, volta para o inicio do loop
+
+    li $v0, 1 # syscall para imprimir inteiro
+    move $a0, $s1 # passa o maximo para $a0
+    syscall
+
+    li $v0, 10 # syscall para terminar o programa
+    syscall
+
