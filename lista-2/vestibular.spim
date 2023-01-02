@@ -1,0 +1,48 @@
+.data
+str1: .space 100 # reserva espaço para uma string de tamanho variável
+str2: .space 100 # reserva espaço para uma string de tamanho variável
+
+.text
+
+main:
+    li $v0, 5
+    syscall
+    move $t0, $v0
+    li $t1, 0 # índice da string
+    li $t4, 0 # acertos
+
+    li $v0, 8 # syscall para ler string
+    la $a0, str1 # endereço da variável str
+    li $a1, 100 # tamanho máximo da string
+    syscall # solicita a leitura da string
+
+    li $v0, 8 # syscall para ler string
+    la $a0, str2 # endereço da variável str
+    li $a1, 100 # tamanho máximo da string
+    syscall # solicita a leitura da string
+
+loop:
+    lb $t2, str1($t1) # lê o próximo caractere da string 1
+    lb $t3, str2($t1) # lê o próximo caractere da string 2
+    beq $t2, $t3, skip # se os caracteres forem iguais, vá para skip
+
+    addi $t1, $t1, 1 # incrementa o índice
+    bne $t1, $t0, loop # se o índice for diferente de $t0 (tamanho da string), volta para o início do loop
+    
+    jal fim
+
+skip:
+    addi $t4, $t4, 1 # incrementa o número de acertos
+    addi $t1, $t1, 1 # incrementa o índice
+    bne $t1, $t0, loop # se o índice for diferente de $t0 (tamanho da string), volta para o início do loop
+
+fim:
+    li $v0, 1
+    move $a0, $t4 # número de acertos
+    syscall
+
+    li $v0, 10
+    syscall
+
+
+
