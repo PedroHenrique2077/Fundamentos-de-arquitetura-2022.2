@@ -1,0 +1,52 @@
+# .text
+
+# main:
+#     li $a0, 1
+#     jal bitparidade
+
+#     li $v0, 1
+#     move $a0, $v1
+#     syscall
+
+#     li $v0, 11 # Carrega o código da função putchar em $v0
+#     li $a0, 10 # Carrega o valor de quebra de linha em ASCII em $a0
+#     syscall # Chama a função de saída de 
+    
+#     li $v0, 1
+#     move $a0, $t5
+#     syscall
+
+#     li $v0, 10
+#     syscall
+
+bitparidade:
+    move $t9, $zero
+    move $s0, $a0
+    li $t6, 0
+    li $t0, 1
+    loop:
+        beq $t6, 7, continue
+        and $t1, $t0, $s0
+        add $t9, $t9, $t1
+        srl $s0, $s0, 1
+        addi $t6, $t6, 1
+        j loop 
+
+    continue:
+        andi $t9, $t9, 1
+        
+        beq $t9, 1, impar
+
+        par:
+            move $v1, $a0
+            li $v0, 0
+
+            jr $ra
+
+        impar:
+            move $v1, $a0
+            addi $v1, $v1, 128
+            li $v0, 1
+
+            jr $ra
+    
