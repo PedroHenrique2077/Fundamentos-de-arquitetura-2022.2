@@ -1,0 +1,106 @@
+.data
+    espaco: .byte ' '
+
+.text
+
+main:
+    li $v0, 5
+    syscall
+
+    move $t0, $v0
+    addi $t0, $t0, 1
+
+    li $t1, 1 
+    li $t2, 1
+
+    while:
+        beq $t1, $t0, chamadaP2 #se o $t1 for igual ao $t0, vá para a label chamadaP2
+
+        blt $t1, 10, menorQueDez #se o numero for igual ao contador, vá para a label menorQueDez
+        
+        li $v0, 1
+        move $a0, $t1
+        syscall #imprime o numero
+
+        li $v0, 4
+        la $a0, espaco
+        syscall #imprime espaço
+
+        beq $t1, $t2, quebraf1 #se o numero for igual ao contador, quebra a linha
+        addi $t2, $t2, 1 #soma 1 em $t2
+
+        j while #volta para o while
+
+    
+    chamadaP2:
+        li $v0, 11 # Carrega o código da função putchar em $v0
+        li $a0, 10 # Carrega o valor de quebra de linha em ASCII em $a0
+        syscall # Chama a função de saída de caractere
+
+        li $t1, 1 #zera $t1
+        li $t2, 1 #zera $t2
+
+        j while2 #volta para o while2
+
+    quebraf1:
+    li $v0, 11 # Carrega o código da função putchar em $v0
+    li $a0, 10 # Carrega o valor de quebra de linha em ASCII em $a0
+    syscall # Chama a função de saída de caractere
+    addi $t1, $t1, 1 #soma 1 em $t1
+    li $t2, 1  #zera $t2
+    j while #volta para o while
+
+    quebraf2:
+    li $v0, 11 # Carrega o código da função putchar em $v0
+    li $a0, 10 # Carrega o valor de quebra de linha em ASCII em $a0
+    syscall # Chama a função de saída de caractere
+    addi $t1, $t1, 1 #soma 1 em $t1
+    li $t2, 1 #zera $t2
+    j while2 #volta para o while2
+
+    menorQueDez:
+        move $t3, $zero
+        li $v0, 1
+        move $a0, $t3
+        syscall #imprime o zero antes do numero
+
+        li $v0, 1
+        move $a0, $t1
+        syscall #imprime o numero
+
+        li $v0, 4
+        la $a0, espaco
+        syscall #imprime espaço
+
+        beq $t1, $t2, quebraf1 #se o numero for igual ao contador, quebra a linha
+        addi $t2, $t2, 1 #soma 1 em $t2
+
+        j while #volta para o while
+
+    while2:
+        beq $t1, $t0, end #se o contador for igual ao numero, vá para a label end
+        
+        bge $t2, 10, continue #se o numero for maior ou igual a 10, vá para a label continue
+
+        move $t3, $zero
+        li $v0, 1
+        move $a0, $t3
+        syscall #imprime o zero antes do numero
+
+        continue:
+            li $v0, 1
+            move $a0, $t2
+            syscall #imprime o numero
+
+        li $v0, 4
+        la $a0, espaco
+        syscall #imprime espaço
+
+        beq $t1, $t2, quebraf2 #se o numero for igual ao contador, quebra a linha, soma 1 em $t1 e zera $t2
+        addi $t2, $t2, 1 #soma 1 em $t2
+
+        j while2 #volta para o while2
+
+    end:
+        li $v0, 10
+        syscall
