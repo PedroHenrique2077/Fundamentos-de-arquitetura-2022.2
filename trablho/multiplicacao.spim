@@ -1,0 +1,59 @@
+# Multiplicação de dois números inteiros com sinal
+# A = primeiro número
+# B = segundo número
+# LO = resultado da multiplicação
+#
+# Registers:
+#   $t0 = A
+#   $t1 = B
+#   $t2 = resultado parcial da multiplicação
+#   $t3 = controle de sinal
+.text
+
+main:
+    li $a0, 5
+    li $a1, 3
+    jal multiplicacao
+    move $a0, $v0
+    li $v0, 1
+    syscall
+
+    li $v0, 10
+    syscall
+
+multiplicacao:
+
+move $t0 , $a0 #multiplicando
+move $t1 , $a1 #multiplicador
+li $t5 , 0 #resultado parcial
+li $t4 , 32 #contador
+
+inicio:
+# Armazenar o valor do multiplicador em $t2
+move $t2, $t1
+
+# Realizar a operação AND com 1
+andi $t3, $t2, 1
+
+beq $t3, 1, soma
+
+retorna:
+# Deslocar o valor de A para a esquerda
+sll $t0, $t0, 1
+
+# Deslocar o valor de B para a direita
+srl $t1, $t1, 1
+
+addi $t4, $t4, -1
+
+bne $t4, 0, inicio
+move $v0, $t5
+jr $ra
+
+soma:
+add $t5, $t5, $t0
+j retorna
+
+
+
+
